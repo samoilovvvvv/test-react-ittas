@@ -8,6 +8,20 @@
   padding: 20px;
   box-sizing: border-box;
 
+  strong + div{
+
+    p {
+      display: inline-block;
+      margin-bottom: 0;
+    }
+  }
+
+  img {
+    width: 30px;
+    height: 30px;
+    margin-top: 12px;
+  }
+
   div {
     display: flex;
     justify-content: center;
