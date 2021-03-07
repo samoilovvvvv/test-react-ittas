@@ -3,14 +3,22 @@ import './CityCard.scss'
 import Button from '../UI/Button/Button'
 
 const CityCard = props => {
+  
+  const style = {
+    transform: `rotate(-${props.wind.direction}deg)`
+  }
+  
   return (
     <div className={'CityCard'}>
-      <strong>Город: Минск</strong>
-      <p>Температура: 0c</p>
-      <p>Влажность: 52%</p>
-      <p>Атмосферное давление 1015</p>
-      <p>Сила и направление ветра: 3.02М/C</p>
-      <p>Последнее обновление данных: 4 Марта 2021 09:00:00</p>
+      <strong>Город: {props.city}</strong>
+      <div>
+        <p>Температура: {props.temperature}&#176;C</p>
+        <img src={`http://openweathermap.org/img/wn/${props.icon}@2x.png`}/>
+      </div>
+      <p>Влажность: {props.humidity}%</p>
+      <p>Атмосферное давление: {props.atmospherePressure}</p>
+      <p>Сила и направление ветра: {props.wind.speed}М/C - <i style={style} className="fa fa-arrow-right"></i></p>
+      <p>Последнее обновление данных: {`${props.update.day} ${props.update.month} ${props.update.year} ${props.update.time}`}</p>
       <div>
         <Button type={'delete'}>Удалить</Button>
         <Button type={'update'}>Обновить</Button>
