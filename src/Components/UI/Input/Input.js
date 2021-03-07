@@ -8,6 +8,8 @@ const Input = props => {
   
   if (type === 'text') cls.push('text')
   
+  if (type === 'checkbox') cls.push('checkbox')
+  
   return (
     <div className={cls.join(' ')}>
       <label htmlFor={htmlFor}>{props.label}</label>

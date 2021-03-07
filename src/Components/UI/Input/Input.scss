@@ -2,11 +2,24 @@
   box-sizing: border-box;
 }
 
+.checkbox {
+  border: 1px solid black;
+  border-radius: 7px;
+  font-size: 0.8em;
+  padding-left: 10px;
+  padding-right: 7px;
+
+  input {
+    margin-top: 5px;
+  }
+}
+
 .text {
   margin-right: 10px;
 
   input {
-    width: 400px;
+    height: 26px;
+    width: 500px;
     box-sizing: border-box;
   }
 }
