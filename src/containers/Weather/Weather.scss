@@ -2,22 +2,31 @@
   display: flex;
   justify-content: center;
   padding-top: 100px;
+  height: 100vh;
 
   > div {
-    //width: 70%;
-    //display: flex;
-    //align-items: center;
-    //flex-direction: column;
 
-    > div {
+    .headerDiv {
+      margin-bottom: 50px;
       display: flex;
+      justify-content: center;
 
+      >div {
+        display: inline-block;
+        position: relative;
+      }
+
+      .inputs {
+        display: flex;
+        justify-content: center;
+      }
+    }
+
+    .footerDiv {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
     }
   }
 
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
 }
