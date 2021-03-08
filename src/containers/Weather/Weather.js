@@ -191,7 +191,10 @@ export default class Weather extends Component {
               </div>
               {
                 this.state.cities.length > 0
-                  ? <CitiesList onCkick={event => this.clickCityHandler(event)} cities={this.state.cities}/>
+                  ? <CitiesList
+                      onClick={event => this.clickCityHandler(event)}
+                      cities={this.state.cities}
+                  />
                   : null
               }
             </div>

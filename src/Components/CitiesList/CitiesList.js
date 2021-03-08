@@ -13,7 +13,7 @@ const CitiesList = props => {
   }
   
   return (
-    <ul onClick={props.onCkick} className={'CitiesList'}>
+    <ul onClick={props.onClick} className={'CitiesList'}>
       {renderLi(props.cities)}
     </ul>
   )
