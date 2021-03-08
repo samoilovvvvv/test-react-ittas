@@ -18,6 +18,7 @@ const Input = props => {
         type={type}
         value={props.value}
         onChange={props.onChange}
+        readOnly={props.readOnly}
       />
     </div>
     

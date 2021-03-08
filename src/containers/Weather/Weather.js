@@ -16,7 +16,8 @@ export default class Weather extends Component {
       inputs: {
         input: {
           value: '',
-          type: 'text'
+          type: 'text',
+          readOnly: false
         },
         checkbox: {
           type: 'checkbox',
@@ -57,12 +58,35 @@ export default class Weather extends Component {
       
     } catch (e) {
       const {weather} = this.state
+      const inputs = {...this.state.inputs}
+      
+      const {input} = inputs
+      
+      input.readOnly = true
+      
+      inputs['input'] = input
       
       weather.push({failedRequest: true})
       
       this.setState({
         weather
+        weather,
+        inputs
       })
+      
+      const timeout = window.setTimeout(() => {
+        weather.pop();
+        input.readOnly = false
+        
+        inputs['input'] = input
+        
+        this.setState({
+          weather,
+          inputs
+        })
+        
+        window.clearTimeout(timeout)
+      }, 2000)
       
       console.error(e)
     }
@@ -112,7 +136,7 @@ export default class Weather extends Component {
             icon={item.icon}
           />
           
-        : <ErrorMessage/>
+        : <ErrorMessage key={index}/>
       )
     })
   }
@@ -183,6 +207,7 @@ export default class Weather extends Component {
                 <Input
                   onChange={event => {this.changeInputHandler(event, 'input')}}
                   value={this.state.inputs.input.value}
+                  readOnly={this.state.inputs.input.readOnly}
                 />
                 <Input
                   type={this.state.inputs.checkbox.type}
