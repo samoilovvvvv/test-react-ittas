@@ -13,6 +13,8 @@ export default class Weather extends Component {
     super(props);
     
     this.state = {
+      interval: 0,
+      autoUpdate: false,
       cities: [],
       weather: [],
       inputs: {
@@ -160,6 +162,17 @@ export default class Weather extends Component {
     })
   }
   
+  renderWidget() {
+    const weatherForWidget = this.state.weather.map(item => {
+      return {
+        city: item.city,
+        temperature: item.temperature
+      }
+    })
+  
+    return weatherForWidget
+  }
+  
   changeInputHandler(event) {
     const inputs = {...this.state.inputs}
     const {input} = inputs
@@ -196,10 +209,7 @@ export default class Weather extends Component {
   }
   
   clickCityHandler(event) {
-    if (event.target.tagName === 'LI') {
-      this.getWeatherData(event.target.innerText)
-    }
-    
+    if (event.target.tagName === 'LI') this.getWeatherData(event.target.innerText)
   }
   
   clickWeatherHandler() {
@@ -240,6 +250,37 @@ export default class Weather extends Component {
     })
   }
   
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if(prevState.autoUpdate !== this.state.autoUpdate) {
+      if (this.state.autoUpdate) {
+        let interval = setInterval(() => {
+          this.state.weather.forEach((item) => {
+            this.getWeatherData(item.city)
+          })
+        }, 10000)
+        this.setState({
+          interval
+        })
+      } else {
+        clearInterval(this.state.interval)
+      }
+    }
+    
+    if(prevState !== this.state) {
+      localStorage.setItem('weather', JSON.stringify(this.state.weather))
+    }
+  }
+  
+  componentDidMount() {
+    const weather = JSON.parse(localStorage.getItem('weather'))
+    
+    if (weather) {
+      this.setState({
+        weather
+      })
+    }
+  }
+  
   render() {
     return (
       <div onClick={this.clickWeatherHandler.bind(this)} className={'Weather'}>
@@ -248,13 +289,14 @@ export default class Weather extends Component {
             <div>
               <div className={'inputs'}>
                 <Input
-                  onChange={event => {this.changeInputHandler(event, 'input')}}
+                  onChangeInput={event => {this.changeInputHandler(event, 'input')}}
                   value={this.state.inputs.input.value}
                   readOnly={this.state.inputs.input.readOnly}
                 />
                 <Input
                   type={this.state.inputs.checkbox.type}
                   label={this.state.inputs.checkbox.label}
+                  onChangeCheckbox={this.changeCheckboxHandler.bind(this)}
                 />
               </div>
               {
@@ -268,6 +310,14 @@ export default class Weather extends Component {
             </div>
           </div>
           <div className={'footerDiv'}>
+            {
+              this.state.weather.length > 0
+              ? <Widget
+                  data={this.renderWidget()}
+                />
+                
+              : null
+            }
             {this.renderCitiesCard()}
           </div>
         </div>
