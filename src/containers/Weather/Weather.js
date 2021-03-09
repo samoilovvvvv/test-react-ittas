@@ -4,8 +4,10 @@ import Input from '../../Components/UI/Input/Input'
 import CitiesList from '../../Components/CitiesList/CitiesList'
 import CityCard from '../../Components/CityCard/CityCard'
 import ErrorMessage from '../../Components/ErrorMessage/ErrorMessage'
+import Widget from '../../Components/UI/Widget/Widget'
 import axios from 'axios'
 const cities = require('./cities.json')
+
 export default class Weather extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +36,7 @@ export default class Weather extends Component {
       `)
       const {weather} = this.state
       
-      console.log(response.data)
+      let id = Math.random()
       
       const data = {
         city: response.data.name,
@@ -47,10 +49,24 @@ export default class Weather extends Component {
         },
         icon: response.data.weather[0].icon,
         update: this.getTime(),
-        failedRequest: false
+        failedRequest: false,
+        id: id,
+        weatherDescription: response.data.weather.description
       }
       
-      weather.push(data)
+      let similar = false
+      
+      weather.forEach((item, index) => {
+        if (item.city === response.data.name) {
+          weather[index] = data
+          similar = true
+          return
+        }
+      })
+        
+      if (!similar) {
+        weather.push(data)
+      }
       
       this.setState({
         weather
@@ -69,7 +85,6 @@ export default class Weather extends Component {
       weather.push({failedRequest: true})
       
       this.setState({
-        weather
         weather,
         inputs
       })
@@ -134,6 +149,10 @@ export default class Weather extends Component {
             wind={item.wind}
             update={item.update}
             icon={item.icon}
+            id={item.id}
+            description={item.weatherDescription}
+            onClickDelete={this.deleteCardHandler.bind(this)}
+            onClickUpdate={this.updateCardHandler.bind(this)}
           />
           
         : <ErrorMessage key={index}/>
@@ -194,6 +213,30 @@ export default class Weather extends Component {
     this.setState({
       inputs,
       cities: []
+    })
+  }
+  
+  deleteCardHandler(id) {
+    const {weather} = this.state
+
+    weather.forEach((item, index) => {
+      if(item.id === id) weather.splice(index, 1)
+    })
+
+    this.setState({
+      weather
+    })
+  }
+  
+  updateCardHandler(id) {
+    this.state.weather.forEach(item => {
+      if(item.id === id) this.getWeatherData(item.city)
+    })
+  }
+  
+  changeCheckboxHandler() {
+    this.setState({
+      autoUpdate: !this.state.autoUpdate
     })
   }
   
