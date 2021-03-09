@@ -5,6 +5,7 @@ const Input = props => {
   const htmlFor = Math.random()
   const type = props.type || 'text'
   const cls = ['Input']
+  const onChange = type === 'text' ? props.onChangeInput : props.onChangeCheckbox
   
   if (type === 'text') cls.push('text')
   
@@ -17,7 +18,7 @@ const Input = props => {
         id={htmlFor}
         type={type}
         value={props.value}
-        onChange={props.onChange}
+        onChange={onChange}
         readOnly={props.readOnly}
       />
     </div>
